@@ -22,13 +22,20 @@ h3. JavaScript
 <pre>
   <code>
   // Called right before tooltip is displayed
-  var on_before_show = function(marker, tooltip) {
+  var before_show = function(marker, tooltip) {
       // Set tooltip contents to the marker's title
       // NOTE you could also attach JSON data to a marker and create more complex tooltips
       tooltip.html(marker.title);
+      // NOTE you can also change the marker's icon
+      marker.setIcon('/images/hover.png');
   };
+  // Called right before tooltip is hidden
+  var before_hide = function(marker, tooltip) {
+    marker.setIcon('/images/normal.png');
+  };
+
   // Attach tooltip to the DIV element
-  var tooltip = new MapTooltip($('#map-tooltip'), on_before_show);
+  var tooltip = new MapTooltip($('#map-tooltip'), before_show, before_hide);
 
   // Add a marker to tooltip, see http://code.google.com/intl/sv-SE/apis/maps/documentation/v3/reference.html#Marker
   tooltip.addMarker(marker); // 
