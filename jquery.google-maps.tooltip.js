@@ -1,13 +1,15 @@
 //
 //
 //
-function MapTooltip(tip, onBeforeShow, onBeforeHide) {
+function MapTooltip(map, tip, onBeforeShow, onBeforeHide) {
   // Don't forget the tip
   var $tooltip = tip;
   // One timer
   var timer = 0;
   // Don't loose our scope
   var self = this;
+  // xy position
+  var overlay = get_overlay(map);
 
   if(!$tooltip.hasClass('tooltip-enabled')) {
     // Mouse enter
@@ -21,6 +23,24 @@ function MapTooltip(tip, onBeforeShow, onBeforeHide) {
     });
 
     $tooltip.addClass('tooltip-enabled');
+  }
+
+  // 
+  // We need this overlay for getting the markers position
+  //
+  function get_overlay(map) {
+    function ProjectionHelperOverlay(map) {
+      this.set_map(map);
+    }
+
+    ProjectionHelperOverlay.prototype = new google.maps.OverlayView();
+    ProjectionHelperOverlay.prototype.draw = function () {
+      if (!this.ready) {
+        this.ready = true;
+        google.maps.event.trigger(this, 'ready');
+      }
+    }; 
+    return new ProjectionHelperOverlay(map);
   }
 
   function startTimer(callback, time) {
